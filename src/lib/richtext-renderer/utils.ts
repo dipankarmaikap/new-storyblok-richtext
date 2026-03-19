@@ -35,38 +35,20 @@ export function transformAttrs(
   const result: Record<string, any> = {};
   const styles: Record<string, string> = {};
 
-  for (const key in attrs) {
-    const value = attrs[key];
-    if (value == null) continue;
 
-    if (key === 'class') {
-      result.class = value;
-      continue;
-    }
-    if (key === 'textAlign') {
-      styles['text-align'] = value;
-      continue;
-    }
-    if (key === 'color') {
-      // If this is a highlight mark, treat as background-color
-      if (options?.markType === 'highlight') {
-        styles['background-color'] = value;
-      } else {
-        styles['color'] = value;
-      }
-      continue;
-    }
+  const {class: className, id, color , textAlign ,fallbackImage ,...rest} = attrs;
 
-    if (key === 'level') {
-      continue;
-    }
-    if (key === "fallbackImage") {      
-      result["src"]= value;
-      continue;
-      
-    }
-    result[key] = value;
-  }
+// Handle common attributes
+
+result["class"] = className;
+result["id"] = id;
+result["src"] = fallbackImage;
+
+
+//handel css styles
+  styles['text-align'] = textAlign;
+  const colorType = options?.markType === 'highlight' ? 'background-color' : 'color'
+  styles[colorType] = color;
 
   // Convert styles object → string
   if (Object.keys(styles).length > 0) {
@@ -74,10 +56,26 @@ export function transformAttrs(
       .map(([k, v]) => `${k}:${v}`)
       .join(';');
   }
-
+Object.assign(result, rest);
   return result;
 }
+export function styleStringToObject(style?: string): Record<string, string> {
+  if (!style) return {};
 
+  return Object.fromEntries(
+    style
+      .split(';')
+      .map((rule) => rule.trim())
+      .filter(Boolean)
+      .map((rule) => {
+        const [key, value] = rule.split(':');
+        return [
+          key.trim().replace(/-([a-z])/g, (_, c) => c.toUpperCase()),
+          value.trim(),
+        ];
+      })
+  );
+}
 
 export function resolveNestedTag(type: PMNode['type']) {
   const map = NODE_RENDER_MAP[type as keyof typeof NODE_RENDER_MAP];

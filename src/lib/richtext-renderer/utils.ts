@@ -1,19 +1,6 @@
 import type { PMMark, PMNode } from ".";
 import { MARK_RENDER_MAP, NODE_RENDER_MAP } from "./tiptap-render-map.generated";
 
-export function resolveType(type: unknown) {
-  if (typeof type !== 'string') return null;
-
-  if (type in NODE_RENDER_MAP) {
-    return { kind: 'node', config: NODE_RENDER_MAP[type as keyof typeof NODE_RENDER_MAP] };
-  }
-
-  if (type in MARK_RENDER_MAP) {
-    return { kind: 'mark', config: MARK_RENDER_MAP[type as keyof typeof MARK_RENDER_MAP] };
-  }
-
-  return null;
-}
 export function resolveTag(node: PMNode) {
   const map = NODE_RENDER_MAP[node.type as keyof typeof NODE_RENDER_MAP];
 
@@ -42,7 +29,8 @@ export function resolveMarkTag(node: PMMark) {
 }
 
 export function transformAttrs(
-  attrs: Record<string, any> = {},
+  attrs: Record<string, any> = {}, 
+  options?: { markType?: string } // optional context for marks
 ): Record<string, any> {
   const result: Record<string, any> = {};
   const styles: Record<string, string> = {};
@@ -55,21 +43,28 @@ export function transformAttrs(
       result.class = value;
       continue;
     }
-
     if (key === 'textAlign') {
       styles['text-align'] = value;
       continue;
     }
-
     if (key === 'color') {
-      styles['color'] = value;
+      // If this is a highlight mark, treat as background-color
+      if (options?.markType === 'highlight') {
+        styles['background-color'] = value;
+      } else {
+        styles['color'] = value;
+      }
       continue;
     }
 
     if (key === 'level') {
       continue;
     }
-
+    if (key === "fallbackImage") {      
+      result["src"]= value;
+      continue;
+      
+    }
     result[key] = value;
   }
 
@@ -81,4 +76,20 @@ export function transformAttrs(
   }
 
   return result;
+}
+
+
+export function resolveNestedTag(type: PMNode['type']) {
+  const map = NODE_RENDER_MAP[type as keyof typeof NODE_RENDER_MAP];
+
+  // TypeScript-safe: only access staticChildren if map has a tag
+  if (map && 'tag' in map) {
+    return {
+      ...map,
+      staticChildren: map.staticChildren ?? []
+    };
+  }
+
+  // If map only has resolve function, return as-is
+  return map;
 }

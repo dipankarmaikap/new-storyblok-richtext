@@ -1,7 +1,8 @@
 ---
 import type { PMNode, StoryblokRichTextComponentMap, RichTextComponentProps } from '..';
-import { resolveTag, transformAttrs } from '../utils';
+import { resolveNestedTag, resolveTag, transformAttrs } from '../utils';
 import RichTextMark from './RichTextMark.astro';
+import StaticChildren from './StaticChildren.astro';
 
 interface Props {
   node: PMNode;
@@ -17,7 +18,10 @@ function resolveComponent<K extends PMNode['type']>(type: K) {
 
 const CustomComponent = resolveComponent(node.type);
 const Element = resolveTag(node);
-const children = node.content ?? [];
+const content = node.content ?? [];
+
+const mapEntry = resolveNestedTag(node.type);
+const staticChildren = mapEntry && 'tag' in mapEntry ? mapEntry.staticChildren : [];
 ---
 
 {
@@ -27,13 +31,27 @@ const children = node.content ?? [];
     <CustomComponent {...node} components={components} />
   ) : Element ? (
     <Element {...transformAttrs(node.attrs)}>
-      {children.map((child) => (
-        <Astro.self node={child} components={components} />
-      ))}
+      {/* Render static children first */}
+
+      {staticChildren.length > 0 ? (
+        <StaticChildren
+          childrenSpec={staticChildren.map((child) => ({
+            tag: child.tag,
+            attrs: { ...child.attrs, ...node.attrs },
+            staticChildren: child.staticChildren,
+          }))}
+        >
+          {content.map((child) => (
+            <Astro.self node={child} components={components} />
+          ))}
+        </StaticChildren>
+      ) : (
+        content.map((child) => <Astro.self node={child} components={components} />)
+      )}
     </Element>
   ) : (
     <div {...transformAttrs(node.attrs)}>
-      {children.map((child) => (
+      {content.map((child) => (
         <Astro.self node={child} components={components} />
       ))}
     </div>

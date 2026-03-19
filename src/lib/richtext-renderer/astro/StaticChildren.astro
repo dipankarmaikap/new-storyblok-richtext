@@ -1,0 +1,23 @@
+---
+// Props interface
+interface Props {
+  childrenSpec: readonly {
+    tag: string;
+    attrs?: Record<string, any>;
+    staticChildren?: readonly any[];
+  }[];
+}
+
+// Utility function to transform attributes
+import { transformAttrs } from '../utils';
+const { childrenSpec } = Astro.props;
+---
+
+{
+  childrenSpec.map((child) => (
+    <child.tag {...transformAttrs(child.attrs)}>
+      {child.staticChildren?.length ? <Astro.self childrenSpec={child.staticChildren} /> : null}
+      <slot />
+    </child.tag>
+  ))
+}

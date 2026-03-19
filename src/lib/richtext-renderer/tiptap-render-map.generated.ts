@@ -9,24 +9,14 @@ export const NODE_RENDER_MAP = {
   paragraph: {
   "tag": "p",
   "attrs": {},
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "staticChildren": []
 },
   doc: null,
   text: null,
   blockquote: {
   "tag": "blockquote",
   "attrs": {},
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "staticChildren": []
 },
   heading: {
     resolve: (attrs: TiptapNodeAttributes['heading']) => `h${attrs?.level || 1}`,
@@ -34,104 +24,60 @@ export const NODE_RENDER_MAP = {
   bullet_list: {
   "tag": "ul",
   "attrs": {},
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "staticChildren": []
 },
   ordered_list: {
   "tag": "ol",
   "attrs": {
-    "type": null,
     "order": 1
   },
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "staticChildren": []
 },
   list_item: {
   "tag": "li",
   "attrs": {},
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "staticChildren": []
 },
   code_block: {
   "tag": "pre",
-  "attrs": {
-    "class": null
-  },
-  "hasHole": true,
-  "children": [
+  "attrs": {},
+  "staticChildren": [
     {
       "tag": "code",
-      "attrs": {
-        "class": null
-      },
-      "hasHole": true,
-      "children": [
-        {
-          "hole": true
-        }
-      ]
+      "attrs": {},
+      "staticChildren": []
     }
   ]
 },
   hard_break: {
   "tag": "br",
   "attrs": {},
-  "hasHole": false,
-  "children": []
+  "staticChildren": []
 },
   horizontal_rule: {
   "tag": "hr",
   "attrs": {},
-  "hasHole": false,
-  "children": []
+  "staticChildren": []
 },
   image: {
   "tag": "img",
-  "attrs": {
-    "src": null,
-    "alt": null,
-    "title": null,
-    "width": null,
-    "height": null,
-    "id": null,
-    "source": null,
-    "copyright": null,
-    "meta_data": null
-  },
-  "hasHole": false,
-  "children": []
+  "attrs": {},
+  "staticChildren": []
 },
   emoji: {
   "tag": "span",
   "attrs": {
-    "data-type": "emoji",
-    "data-name": null,
-    "data-emoji": null
+    "data-type": "emoji"
   },
-  "hasHole": false,
-  "children": [
+  "staticChildren": [
     {
       "tag": "img",
       "attrs": {
-        "src": null,
         "style": "width: 1.25em; height: 1.25em; vertical-align: text-top; display: inline-block;",
         "draggable": "false",
         "loading": "lazy"
       },
-      "hasHole": false,
-      "children": []
+      "staticChildren": []
     }
   ]
 },
@@ -140,91 +86,52 @@ export const NODE_RENDER_MAP = {
   "attrs": {
     "style": "min-width: undefined"
   },
-  "hasHole": true,
-  "children": [
+  "staticChildren": [
     {
       "tag": "tbody",
       "attrs": {},
-      "hasHole": true,
-      "children": [
-        {
-          "hole": true
-        }
-      ]
+      "staticChildren": []
     }
   ]
 },
   tableRow: {
   "tag": "tr",
   "attrs": {},
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "staticChildren": []
 },
   tableCell: {
   "tag": "td",
   "attrs": {
     "colspan": 1,
-    "rowspan": 1,
-    "colwidth": null,
-    "backgroundColor": null
+    "rowspan": 1
   },
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "staticChildren": []
 },
   tableHeader: {
   "tag": "th",
   "attrs": {
     "colspan": 1,
-    "rowspan": 1,
-    "colwidth": null
+    "rowspan": 1
   },
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "staticChildren": []
 },
   blok: null,
   details: {
   "tag": "details",
   "attrs": {},
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "staticChildren": []
 },
   detailsContent: {
   "tag": "div",
   "attrs": {
     "data-type": "detailsContent"
   },
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "staticChildren": []
 },
   detailsSummary: {
   "tag": "summary",
   "attrs": {},
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "staticChildren": []
 },
 } as const;
 
@@ -236,110 +143,54 @@ export const MARK_RENDER_MAP = {
   "tag": "a",
   "attrs": {
     "target": "_blank",
-    "rel": "noopener noreferrer nofollow",
-    "class": null,
-    "href": null,
-    "title": null,
-    "linktype": null
+    "rel": "noopener noreferrer nofollow"
   },
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "staticChildren": []
 },
   textStyle: {
   "tag": "span",
   "attrs": {},
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "staticChildren": []
 },
   bold: {
   "tag": "strong",
   "attrs": {},
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "staticChildren": []
 },
   italic: {
   "tag": "em",
   "attrs": {},
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "staticChildren": []
 },
   strike: {
   "tag": "s",
   "attrs": {},
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "staticChildren": []
 },
   underline: {
   "tag": "u",
   "attrs": {},
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "staticChildren": []
 },
   code: {
   "tag": "code",
   "attrs": {},
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "staticChildren": []
 },
   superscript: {
   "tag": "sup",
   "attrs": {},
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "staticChildren": []
 },
   subscript: {
   "tag": "sub",
   "attrs": {},
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "staticChildren": []
 },
   highlight: {
   "tag": "mark",
-  "attrs": {
-    "color": null
-  },
-  "hasHole": true,
-  "children": [
-    {
-      "hole": true
-    }
-  ]
+  "attrs": {},
+  "staticChildren": []
 },
   anchor: null,
   styled: null,

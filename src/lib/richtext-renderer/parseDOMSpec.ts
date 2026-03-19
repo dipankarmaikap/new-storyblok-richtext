@@ -1,68 +1,62 @@
 import type { ParsedDOMSpec } from './types';
 
 /**
- * Parses a ProseMirror DOMOutputSpec into a structured `{ tag, attrs, hasHole, contents }` object.
- * 
- * ProseMirror's `toDOM` usually returns formats like:
- * - "p"
- * - ["div", { class: "custom" }, 0]
- * - ["code", ["span", 0]]
+ * Simplified parser for ProseMirror/Tiptap DOM spec into a clean Astro-friendly format.
+ * Returns { tag, attrs, staticChildren }.
  */
 export function parseDOMSpec(spec: any): ParsedDOMSpec | null {
+  if (!spec) return null;
+
+  // If it's a string, just a tag with no attrs
   if (typeof spec === 'string') {
-    return { tag: spec, attrs: {}, hasHole: false, children: [] };
+    return { tag: spec, attrs: {}, staticChildren: [] };
   }
-  
-  // Handle raw HTMLElement nodes created by Tiptap extensions (e.g. Emoji)
-  if (spec && typeof spec === 'object' && spec.nodeType === 1) {
+
+  // If it's an HTMLElement, extract tag and attributes
+  if (typeof spec === 'object' && spec.nodeType === 1) {
     const element = spec as HTMLElement;
     const attrs: Record<string, string> = {};
     for (let i = 0; i < element.attributes.length; i++) {
-        const attr = element.attributes[i];
+      const attr = element.attributes[i];
+      if (attr.value != null && attr.value !== '') {
         attrs[attr.name] = attr.value;
+      }
     }
-    return { tag: element.tagName.toLowerCase(), attrs, hasHole: false, children: [] };
+    return { tag: element.tagName.toLowerCase(), attrs, staticChildren: [] };
   }
-  
+
+  // If it's an array, e.g. ["pre", { class: "foo" }, ["code", 0]]
   if (Array.isArray(spec)) {
     const tag = spec[0];
-    let attrs: Record<string, string> = {};
+    let attrs: Record<string, any> = {};
     let contentIdx = 1;
-    
-    // Check if the second element is an attributes object
+
+    // Second element might be attrs object
     if (
-      spec.length > 1 && 
-      typeof spec[1] === 'object' && 
-      spec[1] !== null && 
-      !Array.isArray(spec[1]) && 
-      !spec[1]?.nodeType && 
-      typeof spec[1] !== 'number'
+      spec.length > 1 &&
+      typeof spec[1] === 'object' &&
+      !Array.isArray(spec[1]) &&
+      spec[1]?.nodeType !== 1 &&
+      spec[1] !== null
     ) {
-      attrs = spec[1];
+      attrs = Object.fromEntries(
+        Object.entries(spec[1]).filter(([_, v]) => v != null)
+      );
       contentIdx = 2;
     }
 
-    let hasHole = false;
-    const children: Array<ParsedDOMSpec | string | { hole: true }> = [];
-
+    // Parse static children
+    const staticChildren: ParsedDOMSpec[] = [];
     for (let i = contentIdx; i < spec.length; i++) {
-        const childSpec = spec[i];
-        if (childSpec === 0) {
-            hasHole = true;
-            children.push({ hole: true });
-        } else if (typeof childSpec === 'string') {
-            children.push(childSpec);
-        } else if (Array.isArray(childSpec)) {
-            const parsedChild = parseDOMSpec(childSpec);
-            if (parsedChild) {
-                if (parsedChild.hasHole) hasHole = true;
-                children.push(parsedChild);
-            }
-        }
+      const childSpec = spec[i];
+      if (Array.isArray(childSpec) || typeof childSpec === 'string') {
+        const parsedChild = parseDOMSpec(childSpec);
+        if (parsedChild) staticChildren.push(parsedChild);
+      }
     }
 
-    return { tag, attrs, hasHole, children };
+    return { tag, attrs, staticChildren };
   }
-  
+
   return null;
 }

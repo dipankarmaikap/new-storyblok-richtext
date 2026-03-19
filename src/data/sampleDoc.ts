@@ -1042,7 +1042,7 @@ export const sampleDoc = {
             {
               type: "textStyle",
               attrs: {
-                color: "#DC2865",
+                color: "#f20000",
               },
             },
             {

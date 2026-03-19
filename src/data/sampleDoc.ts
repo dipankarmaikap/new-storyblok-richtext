@@ -1,7 +1,6 @@
-import type { JSONContent } from "../lib/richtext-renderer/core/types";
 
 // Complex Sample Document matching React
-export const sampleDoc: JSONContent = {
+export const sampleDoc = {
   type: "doc",
   content: [
     {

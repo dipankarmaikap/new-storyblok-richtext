@@ -1,10 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { sampleDoc } from '../data/sampleDoc';
-import AstroRichTextRenderer from '../lib/richtext-renderer-v2/astro/AstroRichTextRenderer.astro';
+import AstroRichTextRenderer from '../lib/richtext-renderer/astro/AstroRichTextRenderer.astro';
 import { richTextResolver } from '@storyblok/richtext';
-import CustomHeading from '../components/v2/CustomHeading.astro';
-import BlokResolver from '../components/v2/BlokResolver.astro';
+import CustomHeading from '../components/CustomHeading.astro';
+import BlokResolver from '../components/BlokResolver.astro';
 const { render } = richTextResolver();
 const html = render(sampleDoc);
 ---

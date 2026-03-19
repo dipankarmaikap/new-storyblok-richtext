@@ -1,5 +1,15 @@
 ---
-console.log(Astro.props);
+import type { RichTextComponentProps, StoryblokRichTextJson } from '../lib/richtext-renderer';
+import RichTextMark from '../lib/richtext-renderer/astro/RichTextMark.astro';
+
+interface Props {
+  node: StoryblokRichTextJson;
+}
+const { node } = Astro.props;
+const { attrs, content } = node;
+// console.log(Astro.props);
 ---
 
-<p>This is custom heading</p>
+<h1>
+  {content?.map((node) => <RichTextMark node={node} />)}
+</h1>

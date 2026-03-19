@@ -3,8 +3,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getSchema } from '@tiptap/core';
 import type { AnyExtension } from '@tiptap/core';
-import { defaultExtensions } from '../src/lib/richtext-renderer/core/tiptap-extensions';
-import { parseDOMSpec } from '../src/lib/richtext-renderer/core/parseDOMSpec';
+import { defaultExtensions } from '../src/lib/richtext-renderer/extentions';
+import { parseDOMSpec } from '../src/lib/richtext-renderer/parseDOMSpec';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -117,7 +117,7 @@ export const MARK_RENDER_MAP = {\n`;
 
   const outPath = path.join(
     __dirname,
-    '../src/lib/richtext-renderer-v2/tiptap-render-map.generated.ts',
+    '../src/lib/richtext-renderer/tiptap-render-map.generated.ts',
   );
 
   fs.writeFileSync(outPath, output, 'utf-8');

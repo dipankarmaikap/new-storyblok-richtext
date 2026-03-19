@@ -42,3 +42,13 @@ export type StoryblokRichTextJson = {
 export type StoryblokComponnetMap<T> = {
   [key in MarkType | NodeType]: T;
 }
+
+/**
+ * Parsed DOM Output Specification for a Node or Mark
+ */
+export interface ParsedDOMSpec {
+  tag: string;
+  attrs: Record<string, any>;
+  hasHole: boolean;
+  children: Array<ParsedDOMSpec | string | { hole: true }>;
+}

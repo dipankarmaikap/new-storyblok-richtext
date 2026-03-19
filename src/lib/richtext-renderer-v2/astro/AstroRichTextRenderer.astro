@@ -1,0 +1,19 @@
+---
+import { type StoryblokComponnetMap, type StoryblokRichTextJson } from '..';
+import RichTextNode from './RichTextNode.astro';
+
+interface Props {
+  doc: StoryblokRichTextJson;
+  components?: StoryblokComponnetMap<any>;
+}
+const { doc, components } = Astro.props;
+const content = doc?.content ?? [];
+---
+
+{
+  content.length === 0 ? (
+    <p>No content to display</p>
+  ) : (
+    content.map((node) => <RichTextNode node={node} components={components} />)
+  )
+}

@@ -123,21 +123,6 @@ function main() {
   output += genPMNode(schema) + '\n\n';
   output += genPMMark(schema) + '\n\n';
 
-  // --- Core root type
-  output += '/** Canonical type for a Storyblok RichText JSON root */\n';
-  output += 'export type StoryblokRichTextJson = PMNode;\n\n';
-
-  // --- Component prop typing
-  output += '/** Typed override map for node/mark components */\n';
-  output += 'export interface RichTextComponentProps<T extends TiptapComponentName> {\n';
-  output += '  attrs: T extends TiptapNodeName\n    ? TiptapNodeAttributes[T]\n    : T extends TiptapMarkName ? TiptapMarkAttributes[T] : never;\n';
-  output += '  node?: T extends TiptapNodeName ? PMNode : undefined;\n';
-  output += '  mark?: T extends TiptapMarkName ? PMMark : undefined;\n';
-  output += '}\n\n';
-  output += 'export type StoryblokRichTextComponentMap = {\n';
-  output += '  [K in TiptapComponentName]?: (props: RichTextComponentProps<K>) => any;\n';
-  output += '};\n\n';
-
   const outPath = path.join(__dirname, '../src/lib/richtext-renderer/richtext-types.generated.ts');
   fs.writeFileSync(outPath, output, 'utf-8');
   console.log('Generated: ', outPath);

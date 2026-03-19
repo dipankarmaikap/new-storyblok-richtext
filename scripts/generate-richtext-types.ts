@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { getSchema } from '@tiptap/core';
 import { defaultExtensions } from '../src/lib/richtext-renderer/extentions';
 import type { Schema, NodeType, MarkType } from 'prosemirror-model';
+import { hints } from '../src/lib/richtext-renderer/type-hints';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -13,32 +14,6 @@ const __dirname = path.dirname(__filename);
  * E.g. { color: { default: null } } -> 'color?: string | null;'
  */
 function getAttrType(attrName: string, _def: any): string {
-  // Could extend for more attributes if needed
-  const hints: Record<string, string> = {
-    level: '1 | 2 | 3 | 4 | 5 | 6',
-    textAlign: "'left' | 'center' | 'right' | 'justify' | null",
-    color: 'string | null',
-    class: 'string | null',
-    id: 'string | null',
-    href: 'string',
-    linktype: "'url' | 'story' | 'asset' | 'email'",
-    src: 'string',
-    alt: 'string',
-    title: 'string | null',
-    width: 'number | string | null',
-    height: 'number | string | null',
-    rel: 'string | null',
-    target: "'_self' | '_blank' | '_parent' | '_top' | null",
-    order: 'number',
-    colspan: 'number', rowspan: 'number', colwidth: 'number[] | null',
-    backgroundColor: 'string | null',
-    body: 'SbBlokData[]',
-    emoji: 'string | null',
-    name: 'string | null',
-    fallbackImage: 'string | null',
-    reporter: 'never',
-    // Expand as needed
-  };
   return hints[attrName] || 'any';
 }
 

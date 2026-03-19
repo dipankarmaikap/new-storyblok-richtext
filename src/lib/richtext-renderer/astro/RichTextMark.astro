@@ -1,13 +1,17 @@
 ---
-import type { StoryblokComponnetMap, StoryblokRichTextJson } from '..';
+import type { PMMark, PMNode, RichTextComponentProps, StoryblokRichTextComponentMap } from '..';
 import { resolveMarkTag, transformAttrs } from '../utils';
 
 interface Props {
-  node?: StoryblokRichTextJson;
-  components?: StoryblokComponnetMap<any>;
+  node: Extract<PMNode, { type: 'text' }>;
+  components?: StoryblokRichTextComponentMap;
 }
 const { node, components } = Astro.props;
 const marks = node?.marks ?? [];
+
+function GetComponent(mark: PMMark) {
+  return components?.[mark.type] as ((props: RichTextComponentProps<typeof mark.type>) => any) | undefined;
+}
 ---
 
 {
@@ -17,7 +21,18 @@ const marks = node?.marks ?? [];
       // wrap marks inside-out
       for (let i = marks.length - 1; i >= 0; i--) {
         const mark = marks[i];
-        const Tag = components?.[mark.type] ?? resolveMarkTag(mark);
+
+        const CustomComponent = GetComponent(mark);
+        if (CustomComponent) {
+          content = (
+            <CustomComponent {...mark} components={components}>
+              {content}
+            </CustomComponent>
+          );
+          continue;
+        }
+
+        const Tag = resolveMarkTag(mark);
         content = <Tag {...transformAttrs(mark.attrs)}>{content}</Tag>;
       }
       return content;

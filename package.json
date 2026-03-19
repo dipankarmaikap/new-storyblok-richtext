@@ -57,6 +57,7 @@
   "devDependencies": {
     "@tailwindcss/vite": "^4.2.1",
     "@types/node": "^25.5.0",
+    "prosemirror-model": "^1.25.4",
     "tailwindcss": "^4.2.1"
   }
 }

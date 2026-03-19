@@ -1,15 +1,15 @@
 ---
-import type { RichTextComponentProps, StoryblokRichTextJson } from '../lib/richtext-renderer';
-import RichTextMark from '../lib/richtext-renderer/astro/RichTextMark.astro';
+import RichTextNode from '../lib/richtext-renderer/astro/RichTextNode.astro';
+import type { RichTextComponentProps } from '../lib/richtext-renderer';
 
-interface Props {
-  node: StoryblokRichTextJson;
-}
-const { node } = Astro.props;
-const { attrs, content } = node;
-// console.log(Astro.props);
+type Props = RichTextComponentProps<'heading'>;
+
+const { content, attrs, components } = Astro.props;
+
+const level = attrs?.level ?? 1;
+const Tag = `h${level}` as keyof HTMLElementTagNameMap;
 ---
 
-<h1>
-  {content?.map((node) => <RichTextMark node={node} />)}
-</h1>
+<Tag>
+  {content?.map((child) => <RichTextNode node={child} components={components} />)}
+</Tag>

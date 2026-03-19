@@ -1,20 +1,22 @@
 ---
-import { type StoryblokComponnetMap, type StoryblokRichTextJson } from '..';
+import type { PMNode, StoryblokRichTextComponentMap, RichTextComponentProps } from '..';
 import { resolveTag, transformAttrs } from '../utils';
 import RichTextMark from './RichTextMark.astro';
 
 interface Props {
-  node: StoryblokRichTextJson;
-  components?: StoryblokComponnetMap<any>;
+  node: PMNode;
+  components?: StoryblokRichTextComponentMap;
 }
 
 const { node, components } = Astro.props;
 
-const CustomComponent = node.type && components?.[node.type];
+// 🔑 typed component resolver
+function resolveComponent<K extends PMNode['type']>(type: K) {
+  return components?.[type] as ((props: RichTextComponentProps<K>) => any) | undefined;
+}
 
+const CustomComponent = resolveComponent(node.type);
 const Element = resolveTag(node);
-
-// Render children recursively
 const children = node.content ?? [];
 ---
 
@@ -22,7 +24,7 @@ const children = node.content ?? [];
   node.type === 'text' ? (
     <RichTextMark node={node} components={components} />
   ) : CustomComponent ? (
-    <CustomComponent node={node} />
+    <CustomComponent {...node} components={components} />
   ) : Element ? (
     <Element {...transformAttrs(node.attrs)}>
       {children.map((child) => (
@@ -30,7 +32,6 @@ const children = node.content ?? [];
       ))}
     </Element>
   ) : (
-    // Fallback wrapping
     <div {...transformAttrs(node.attrs)}>
       {children.map((child) => (
         <Astro.self node={child} components={components} />

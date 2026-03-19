@@ -110,10 +110,10 @@ export const MARK_RENDER_MAP = {\n`;
   output += generateRenderEntries(schema.marks, 'mark');
   output += `} as const;\n\n`;
 
-  output += `export type NodeRenderMap = typeof NODE_RENDER_MAP;\n`;
-  output += `export type MarkRenderMap = typeof MARK_RENDER_MAP;\n`;
-  output += `export type MarkType = keyof typeof MARK_RENDER_MAP;\n`;
-  output += `export type NodeType = keyof typeof NODE_RENDER_MAP;\n`;
+  // output += `export type NodeRenderMap = typeof NODE_RENDER_MAP;\n`;
+  // output += `export type MarkRenderMap = typeof MARK_RENDER_MAP;\n`;
+  // output += `export type MarkType = keyof typeof MARK_RENDER_MAP;\n`;
+  // output += `export type NodeType = keyof typeof NODE_RENDER_MAP;\n`;
 
   const outPath = path.join(
     __dirname,

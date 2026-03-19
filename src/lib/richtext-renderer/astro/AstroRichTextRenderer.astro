@@ -1,11 +1,12 @@
 ---
-import { type StoryblokComponnetMap, type StoryblokRichTextJson } from '..';
+import type { StoryblokRichTextJson, StoryblokRichTextComponentMap } from '..';
 import RichTextNode from './RichTextNode.astro';
 
 interface Props {
   doc: StoryblokRichTextJson;
-  components?: StoryblokComponnetMap<any>;
+  components?: StoryblokRichTextComponentMap;
 }
+
 const { doc, components } = Astro.props;
 const content = doc?.content ?? [];
 ---

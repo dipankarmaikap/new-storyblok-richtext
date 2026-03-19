@@ -132,6 +132,9 @@ importers:
       '@types/node':
         specifier: ^25.5.0
         version: 25.5.0
+      prosemirror-model:
+        specifier: ^1.25.4
+        version: 1.25.4
       tailwindcss:
         specifier: ^4.2.1
         version: 4.2.1

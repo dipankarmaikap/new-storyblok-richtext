@@ -346,7 +346,3 @@ export const MARK_RENDER_MAP = {
   reporter: null,
 } as const;
 
-export type NodeRenderMap = typeof NODE_RENDER_MAP;
-export type MarkRenderMap = typeof MARK_RENDER_MAP;
-export type MarkType = keyof typeof MARK_RENDER_MAP;
-export type NodeType = keyof typeof NODE_RENDER_MAP;

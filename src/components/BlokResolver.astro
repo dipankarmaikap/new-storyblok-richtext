@@ -1,5 +1,13 @@
 ---
-console.log(Astro.props);
+import type { RichTextComponentProps } from '../lib/richtext-renderer';
+
+type Props = RichTextComponentProps<'blok'>;
+
+const { attrs } = Astro.props;
+
+const body = attrs?.body ?? 1;
 ---
 
-<p>This is custom blok resolver</p>
+<pre class="bg-gray-50 whitespace-pre-wrap max-h-50 overflow-scroll">
+    {JSON.stringify(body, null, 2)}
+</pre>

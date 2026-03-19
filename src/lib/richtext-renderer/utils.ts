@@ -1,4 +1,4 @@
-import type { Mark, StoryblokRichTextJson } from ".";
+import type { PMMark, PMNode } from ".";
 import { MARK_RENDER_MAP, NODE_RENDER_MAP } from "./tiptap-render-map.generated";
 
 export function resolveType(type: unknown) {
@@ -14,14 +14,14 @@ export function resolveType(type: unknown) {
 
   return null;
 }
-export function resolveTag(node: StoryblokRichTextJson) {
+export function resolveTag(node: PMNode) {
   const map = NODE_RENDER_MAP[node.type as keyof typeof NODE_RENDER_MAP];
 
   if (!map) return 'div';
 
   // If map has a resolve function, call it
   if ('resolve' in map && typeof map.resolve === 'function') {
-    return map.resolve(node.attrs ?? {});
+    return map.resolve(node.attrs as Parameters<typeof map.resolve>[0]);
   }
 
   // If map has a tag, return it
@@ -31,7 +31,7 @@ export function resolveTag(node: StoryblokRichTextJson) {
 
   return 'div'; // fallback
 }
-export function resolveMarkTag(node: Mark) {
+export function resolveMarkTag(node: PMMark) {
   const map = MARK_RENDER_MAP[node.type as keyof typeof MARK_RENDER_MAP];
   if (!map) return 'span';
   // If map has a tag, return it

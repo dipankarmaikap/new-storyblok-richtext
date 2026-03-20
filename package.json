@@ -11,7 +11,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "generate-types": "bun scripts/generate-types.ts",
-    "generate-render-map": "bun scripts/generate-render-map.ts"
+    "generate-render-map": "bun scripts/generate-render-map.ts",
+    "test": "vitest"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.0",
@@ -58,6 +59,7 @@
     "@tailwindcss/vite": "^4.2.1",
     "@types/node": "^25.5.0",
     "prosemirror-model": "^1.25.4",
-    "tailwindcss": "^4.2.1"
+    "tailwindcss": "^4.2.1",
+    "vitest": "^4.1.0"
   }
 }

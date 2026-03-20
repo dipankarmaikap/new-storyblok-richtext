@@ -27,9 +27,7 @@ test("render paragraph", async () => {
       doc: dataWithParagraph,
     },
   });
-  expect(result).toBe(
-    `<p style="text-align:null;color:undefined">You can combine multiple inline styles:</p>`,
-  );
+  expect(result).toBe(`<p>You can combine multiple inline styles:</p>`);
 });
 test("render code_block", async () => {
   const container = await AstroContainer.create();
@@ -57,7 +55,7 @@ test("render code_block", async () => {
     },
   });
   expect(result).toBe(
-    `<pre style="text-align:undefined;color:undefined"><code style="text-align:undefined;color:undefined">console.log(&quot;Hello, world!&quot;);</code></pre>`,
+    `<pre><code>console.log(&quot;Hello, world!&quot;);</code></pre>`,
   );
 });
 test("render emoji", async () => {
@@ -91,6 +89,6 @@ test("render emoji", async () => {
     },
   });
   expect(result).toBe(
-    `<p style="text-align:null;color:undefined"><span src="https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/2705.png" style="text-align:undefined;color:undefined" name="white_check_mark" emoji="✅"><img src="https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/2705.png" style="width: 1.25em; height: 1.25em; vertical-align: text-top; display: inline-block;" draggable="false" loading="lazy" name="white_check_mark" emoji="✅"/></span></p>`,
+    `<p><span data-type="emoji" name="white_check_mark" emoji="✅" src="https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/2705.png" alt="✅"><img style="width: 1.25em; height: 1.25em; vertical-align: text-top; display: inline-block;" draggable="false" loading="lazy"/></span></p>`,
   );
 });

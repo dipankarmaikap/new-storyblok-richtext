@@ -1,0 +1,45 @@
+---
+import { isSelfClosing } from "@/lib/richtext-renderer";
+
+// This component recursively renders a nested structure of static HTML tags.
+// It's used for nodes like `code_block` which renders as `<pre><code>...</code></pre>`.
+
+interface StaticChild {
+  readonly tag: string;
+  readonly attrs?: Record<string, any>;
+  readonly staticChildren?: readonly StaticChild[];
+}
+
+interface Props {
+  staticChildren: readonly StaticChild[];
+  attrs?: Record<string, any>;
+}
+
+const { staticChildren, attrs: parentAttrs = {} } = Astro.props;
+
+const [current, ...rest] = staticChildren;
+const Tag = current?.tag;
+const selfClosing = isSelfClosing(Tag);
+const attrs = { ...current?.attrs, ...parentAttrs };
+---
+
+{
+  Tag ? (
+    selfClosing ? (
+      <Fragment>
+        <current.tag {...attrs} />
+        <Astro.self staticChildren={rest}>
+          <slot />
+        </Astro.self>
+      </Fragment>
+    ) : (
+      <current.tag {...attrs}>
+        <Astro.self staticChildren={rest}>
+          <slot />
+        </Astro.self>
+      </current.tag>
+    )
+  ) : (
+    <slot />
+  )
+}

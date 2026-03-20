@@ -1,8 +1,11 @@
 ---
-import type { PMNode, StoryblokRichTextComponentMap, RichTextComponentProps } from '..';
-import { resolveNestedTag, resolveTag, transformAttrs } from '../utils';
-import RichTextMark from './RichTextMark.astro';
-import StaticChildren from './StaticChildren.astro';
+import {
+  resolveComponent,
+  type PMNode,
+  type StoryblokRichTextComponentMap,
+} from "..";
+import TextRenderer from "./TextRenderer.astro";
+import StandardNodeRenderer from "./StandardNodeRenderer.astro";
 
 interface Props {
   node: PMNode;
@@ -11,49 +14,15 @@ interface Props {
 
 const { node, components } = Astro.props;
 
-// 🔑 typed component resolver
-function resolveComponent<K extends PMNode['type']>(type: K) {
-  return components?.[type] as ((props: RichTextComponentProps<K>) => any) | undefined;
-}
-
-const CustomComponent = resolveComponent(node.type);
-const Element = resolveTag(node);
-const content = node.content ?? [];
-
-const mapEntry = resolveNestedTag(node.type);
-const staticChildren = mapEntry && 'tag' in mapEntry ? mapEntry.staticChildren : [];
+const NodeComponent = resolveComponent(node.type, components);
 ---
 
 {
-  node.type === 'text' ? (
-    <RichTextMark node={node} components={components} />
-  ) : CustomComponent ? (
-    <CustomComponent {...node} components={components} />
-  ) : Element ? (
-    <Element {...transformAttrs(node.attrs)}>
-      {/* Render static children first */}
-
-      {staticChildren.length > 0 ? (
-        <StaticChildren
-          childrenSpec={staticChildren.map((child) => ({
-            tag: child.tag,
-            attrs: { ...child.attrs, ...node.attrs },
-            staticChildren: child.staticChildren,
-          }))}
-        >
-          {content.map((child) => (
-            <Astro.self node={child} components={components} />
-          ))}
-        </StaticChildren>
-      ) : (
-        content.map((child) => <Astro.self node={child} components={components} />)
-      )}
-    </Element>
+  node.type === "text" ? (
+    <TextRenderer node={node} components={components} />
+  ) : NodeComponent ? (
+    <NodeComponent {...node} components={components} />
   ) : (
-    <div {...transformAttrs(node.attrs)}>
-      {content.map((child) => (
-        <Astro.self node={child} components={components} />
-      ))}
-    </div>
+    <StandardNodeRenderer node={node} components={components} />
   )
 }

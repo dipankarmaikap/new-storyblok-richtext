@@ -1,42 +1,29 @@
 ---
-import type { PMMark, PMNode, RichTextComponentProps, StoryblokRichTextComponentMap } from '..';
-import { resolveMarkTag, transformAttrs } from '../utils';
+import type { PMMark, StoryblokRichTextComponentMap } from "..";
+import { resolveComponent, resolveMarkTag, transformAttrs } from "..";
 
 interface Props {
-  node: Extract<PMNode, { type: 'text' }>;
+  mark: PMMark;
   components?: StoryblokRichTextComponentMap;
 }
-const { node, components } = Astro.props;
-const marks = node?.marks ?? [];
 
-function GetComponent(mark: PMMark) {
-  return components?.[mark.type] as ((props: RichTextComponentProps<typeof mark.type>) => any) | undefined;
-}
+const { mark, components } = Astro.props;
+
+const MarkComponent = resolveComponent(mark.type, components);
+const Tag = !MarkComponent ? resolveMarkTag(mark) : null;
+const attrs = !MarkComponent
+  ? transformAttrs(mark.attrs, { markType: mark.type })
+  : {};
 ---
 
 {
-  marks.length > 0 ? (
-    (() => {
-      let content: any = node?.text ?? '';
-      // wrap marks inside-out
-      for (let i = 0; i < marks.length; i++) {
-        const mark = marks[i];
-        const CustomComponent = GetComponent(mark);
-        if (CustomComponent) {
-          content = (
-            <CustomComponent {...mark} components={components}>
-              {content}
-            </CustomComponent>
-          );
-          continue;
-        }
-
-        const Tag = resolveMarkTag(mark);
-        content = <Tag {...transformAttrs(mark.attrs, { markType: mark.type })}>{content}</Tag>;
-      }
-      return content;
-    })()
-  ) : (
-    <>{node?.text}</>
-  )
+  MarkComponent ? (
+    <MarkComponent {...mark} components={components}>
+      <slot />
+    </MarkComponent>
+  ) : Tag ? (
+    <Tag {...attrs}>
+      <slot />
+    </Tag>
+  ) : null
 }

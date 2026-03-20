@@ -1,0 +1,49 @@
+---
+import type { PMNode, StoryblokRichTextComponentMap } from "../";
+import {
+  getStaticChildren,
+  isSelfClosing,
+  resolveTag,
+  transformAttrs,
+} from "../";
+import RichTextNode from "./RichTextNode.astro";
+import StaticContainerRenderer from "./StaticContainerRenderer.astro";
+
+interface Props {
+  node: PMNode;
+  components?: StoryblokRichTextComponentMap;
+}
+
+const { node, components } = Astro.props;
+const Tag = resolveTag(node);
+
+if (!Tag) {
+  return null;
+}
+const attrs = transformAttrs(node.attrs, { nodeType: node.type });
+
+const selfClosing = isSelfClosing(Tag);
+
+const staticChildren = getStaticChildren(node.type);
+const hasStaticChildren = staticChildren.length > 0;
+---
+
+{
+  selfClosing ? (
+    <Tag {...attrs} />
+  ) : (
+    <Tag {...attrs}>
+      {hasStaticChildren ? (
+        <StaticContainerRenderer attrs={attrs} staticChildren={staticChildren}>
+          {node.content?.map((childNode) => (
+            <RichTextNode node={childNode} components={components} />
+          ))}
+        </StaticContainerRenderer>
+      ) : (
+        node.content?.map((childNode) => (
+          <RichTextNode node={childNode} components={components} />
+        ))
+      )}
+    </Tag>
+  )
+}

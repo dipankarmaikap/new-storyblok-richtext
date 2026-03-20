@@ -65,21 +65,14 @@ export const NODE_RENDER_MAP = {
   "staticChildren": []
 },
   emoji: {
-  "tag": "span",
+  "tag": "img",
   "attrs": {
-    "data-type": "emoji"
+    "data-type": "emoji",
+    "style": "width: 1.25em; height: 1.25em; vertical-align: text-top; display: inline-block;",
+    "draggable": "false",
+    "loading": "lazy"
   },
-  "staticChildren": [
-    {
-      "tag": "img",
-      "attrs": {
-        "style": "width: 1.25em; height: 1.25em; vertical-align: text-top; display: inline-block;",
-        "draggable": "false",
-        "loading": "lazy"
-      },
-      "staticChildren": []
-    }
-  ]
+  "staticChildren": []
 },
   table: {
   "tag": "table",

@@ -149,20 +149,23 @@ export const StoryblokEmoji = Emoji.extend({
       name: { default: null },
       emoji: { default: null },
       fallbackImage: { default: null },
-    }
+    };
   },
   renderHTML({ HTMLAttributes }) {
-    return ['span', {
-      'data-type': 'emoji',
-      'data-name': HTMLAttributes.name,
-      'data-emoji': HTMLAttributes.emoji,
-    }, ['img', {
-      src: HTMLAttributes.fallbackImage,
-      alt: HTMLAttributes.alt,
-      style: 'width: 1.25em; height: 1.25em; vertical-align: text-top; display: inline-block;',
-      draggable: 'false',
-      loading: 'lazy',
-    }]];
+    return [
+      "img",
+      {
+        "data-type": "emoji",
+        "data-name": HTMLAttributes.name,
+        "data-emoji": HTMLAttributes.emoji,
+        src: HTMLAttributes.fallbackImage,
+        alt: HTMLAttributes.alt,
+        style:
+          "width: 1.25em; height: 1.25em; vertical-align: text-top; display: inline-block;",
+        draggable: "false",
+        loading: "lazy",
+      },
+    ];
   },
 });
 

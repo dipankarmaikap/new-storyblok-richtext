@@ -19,7 +19,6 @@
     "@astrojs/svelte": "^8.0.0",
     "@astrojs/vue": "^6.0.0",
     "@storyblok/richtext": "^4.1.0",
-    "@tailwindcss/typography": "^0.5.19",
     "@tiptap/core": "^3.20.2",
     "@tiptap/extension-blockquote": "^3.20.2",
     "@tiptap/extension-bold": "^3.20.2",
@@ -56,6 +55,7 @@
     "vue": "^3.5.30"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.2.1",
     "@types/node": "^25.5.0",
     "prosemirror-model": "^1.25.4",

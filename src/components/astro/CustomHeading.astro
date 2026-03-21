@@ -1,0 +1,19 @@
+---
+import RichTextNode from "@/lib/richtext-renderer/astro/RichTextNode.astro";
+import type { RichTextComponentProps } from "@/lib/richtext-renderer";
+
+type Props = RichTextComponentProps<"heading">;
+
+const { content, attrs, components } = Astro.props;
+
+const level = attrs?.level ?? 1;
+const Tag = `h${level}` as keyof HTMLElementTagNameMap;
+---
+
+<Tag>
+  {
+    content?.map((child) => (
+      <RichTextNode node={child} components={components} />
+    ))
+  }
+</Tag>

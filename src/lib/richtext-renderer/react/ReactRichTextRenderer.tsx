@@ -1,5 +1,5 @@
 import React from "react";
-import type { StoryblokRichTextJson, StoryblokRichTextComponentMap } from "..";
+import type { StoryblokRichTextJson, StoryblokRichTextComponentMap } from "../";
 import RichTextNode from "./RichTextNode";
 
 interface RichTextRendererProps {

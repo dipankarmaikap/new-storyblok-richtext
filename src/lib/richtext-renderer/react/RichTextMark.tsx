@@ -1,5 +1,5 @@
 import React, { type JSX } from "react";
-import type { PMMark, PMNode, StoryblokRichTextComponentMap } from "..";
+import type { PMMark, PMNode, StoryblokRichTextComponentMap } from "../";
 import { resolveMarkTag, styleStringToObject, transformAttrs } from "../utils";
 
 interface RichTextMarkProps {
@@ -11,7 +11,7 @@ const RichTextMark: React.FC<RichTextMarkProps> = ({ node, components }) => {
   const marks = node?.marks ?? [];
 
   function GetComponent(mark: PMMark) {
-  return components?.[mark.type] as React.ComponentType<any> | undefined;
+    return components?.[mark.type] as React.ComponentType<any> | undefined;
   }
 
   let content: any = node?.text ?? "";
@@ -21,15 +21,23 @@ const RichTextMark: React.FC<RichTextMarkProps> = ({ node, components }) => {
     const CustomComponent = GetComponent(mark);
     if (CustomComponent) {
       content = (
-        <CustomComponent {...mark} components={components}>{content}</CustomComponent>
+        <CustomComponent {...mark} components={components}>
+          {content}
+        </CustomComponent>
       );
       continue;
     }
     const Tag = resolveMarkTag(mark) as keyof JSX.IntrinsicElements;
 
-    const {style,...rest} = transformAttrs(mark.attrs, { markType: mark.type });
+    const { style, ...rest } = transformAttrs(mark.attrs, {
+      markType: mark.type,
+    });
 
-    content = React.createElement(Tag, { ...rest, style: styleStringToObject(style) }, content);
+    content = React.createElement(
+      Tag,
+      { ...rest, style: styleStringToObject(style) },
+      content,
+    );
   }
   return <>{content}</>;
 };

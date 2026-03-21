@@ -1,5 +1,5 @@
-import type { RichTextComponentProps } from "../../lib/richtext-renderer";
-import RichTextNode from "../../lib/richtext-renderer/react/RichTextNode";
+import type { RichTextComponentProps } from "@/lib/richtext-renderer";
+import RichTextNode from "@/lib/richtext-renderer/react/RichTextNode";
 type Props = RichTextComponentProps<"heading">;
 
 export default function CustomHeading({ attrs, content, components }: Props) {

@@ -1,5 +1,5 @@
-import ReactRichTextRenderer from "../lib/richtext-renderer/react/ReactRichTextRenderer";
-import type { StoryblokRichTextJson } from "../lib/richtext-renderer";
+import ReactRichTextRenderer from "@/lib/richtext-renderer/react/ReactRichTextRenderer";
+import type { StoryblokRichTextJson } from "@/lib/richtext-renderer";
 import CustomHeading from "./react/CustomHeading";
 import BlokResolver from "@/components/react/BlokResolver";
 

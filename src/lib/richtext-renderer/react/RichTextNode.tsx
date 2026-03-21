@@ -1,9 +1,9 @@
-import React, { type JSX } from "react";
+import React from "react";
 import {
   type PMNode,
   type StoryblokRichTextComponentMap,
   isSelfClosing,
-} from "..";
+} from "../";
 import {
   getStaticChildren,
   resolveComponent,

@@ -6,7 +6,7 @@ import { richTextResolver } from "@storyblok/richtext";
 import CustomHeading from "../components/CustomHeading.astro";
 import BlokResolver from "../components/BlokResolver.astro";
 import type { StoryblokRichTextJson } from "../lib/richtext-renderer";
-// import ReactRichText from "../components/ReactRichText";
+import ReactRichText from "../components/ReactRichText";
 const { render } = richTextResolver();
 const html = render(sampleDoc as any);
 ---
@@ -31,12 +31,16 @@ const html = render(sampleDoc as any);
           />
         </div>
       </section>
-      <!-- <section>
-        <h2 class="text-2xl font-bold mb-4 text-orange-600">React Renderer Output (with Custom Components)</h2>
-        <div class="p-6 bg-white rounded-lg shadow-md border border-gray-200 prose prose-orange max-w-none">
+      <section>
+        <h2 class="text-2xl font-bold mb-4 text-orange-600">
+          React Renderer Output (with Custom Components)
+        </h2>
+        <div
+          class="p-6 bg-white rounded-lg shadow-md border border-gray-200 prose prose-orange max-w-none"
+        >
           <ReactRichText doc={sampleDoc as StoryblokRichTextJson} />
         </div>
-      </section> -->
+      </section>
       <section>
         <h2 class="text-2xl font-bold mb-4 text-orange-600">
           Existing Richtext Renderer Output (without Custom Components)

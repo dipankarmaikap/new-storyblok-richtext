@@ -7,7 +7,10 @@ interface RichTextRendererProps {
   components?: StoryblokRichTextComponentMap;
 }
 
-const AstroRichTextRenderer: React.FC<RichTextRendererProps> = ({ doc, components }) => {
+const ReactRichTextRenderer: React.FC<RichTextRendererProps> = ({
+  doc,
+  components,
+}) => {
   const content = doc?.content ?? [];
   if (content.length === 0) {
     return <p>No content to display</p>;
@@ -21,4 +24,4 @@ const AstroRichTextRenderer: React.FC<RichTextRendererProps> = ({ doc, component
   );
 };
 
-export default AstroRichTextRenderer;
+export default ReactRichTextRenderer;

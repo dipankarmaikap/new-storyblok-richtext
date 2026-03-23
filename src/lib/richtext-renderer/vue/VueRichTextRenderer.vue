@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { StoryblokRichTextJson, StoryblokRichTextComponentMap } from "..";
-import RichTextNode from "./RichTextNode.vue";
+import RichTextNode from "./RichTextNode";
 
 interface RichTextRendererProps {
   doc: StoryblokRichTextJson;
@@ -18,7 +18,7 @@ const content = props.doc?.content ?? [];
       v-for="(node, idx) in content"
       :key="idx"
       :node="node"
-      :components="components"
+      :components="props.components"
     />
   </template>
   <p v-else>No content to display</p>

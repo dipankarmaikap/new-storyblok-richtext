@@ -1,59 +1,62 @@
-<script lang="ts">
-import { defineComponent, h, type PropType, type VNode } from "vue";
-import type { PMNode, StoryblokRichTextComponentMap } from "..";
+import { defineComponent, h } from "vue";
+import type { PMNode, StoryblokRichTextComponentMap } from "../";
 import {
-  getStaticChildren,
   isSelfClosing,
-  resolveComponent,
+  getStaticChildren,
   resolveTag,
   styleStringToObject,
   transformAttrs,
-} from "../../utils";
-import RichTextMark from "./RichTextMark.vue";
-
-// Self-reference for recursion
-import RichTextNode from "./RichTextNode.vue";
+} from "@/lib/richtext-renderer";
+import RichTextMark from "./RichTextMark";
+import { resolveComponent } from "@/lib/richtext-renderer/vue/resolveComponent";
 
 export default defineComponent({
   name: "RichTextNode",
   props: {
     node: {
-      type: Object as PropType<PMNode>,
+      type: Object as () => PMNode,
       required: true,
     },
     components: {
-      type: Object as PropType<StoryblokRichTextComponentMap>,
+      type: Object as () => StoryblokRichTextComponentMap,
+      required: false,
     },
   },
   setup(props) {
-    const renderFn = (): VNode | string | null => {
-      const { node, components } = props;
-
+    const renderNode = (node: PMNode): any => {
+      // text node
       if (node.type === "text") {
-        return h(RichTextMark, { node, components });
+        return h(RichTextMark, {
+          node,
+          components: props.components,
+        });
       }
 
-      const NodeComponent = resolveComponent(node.type, components);
+      // custom component override
+      const NodeComponent = resolveComponent(node.type, props.components);
       if (NodeComponent) {
-        return h(NodeComponent, { ...node, components });
+        return h(NodeComponent, {
+          ...node,
+          components: props.components,
+        });
       }
 
+      // fallback to tag
       const Tag = resolveTag(node);
+
       const { style, ...rest } = transformAttrs(node.attrs, {
         nodeType: node.type,
       });
 
       const dynamicChildren =
-        node.content?.map((child, idx) =>
-          h(RichTextNode, { key: idx, node: child, components }),
-        ) ?? [];
+        node.content?.map((child) => renderNode(child)) ?? [];
 
       const staticChildrenSpec = getStaticChildren(node.type);
 
       const renderStatic = (
         specs: readonly any[],
-        dynamicContent: VNode[],
-      ): VNode[] => {
+        dynamicContent: any[],
+      ): any => {
         if (!specs || specs.length === 0) {
           return dynamicContent;
         }
@@ -69,7 +72,11 @@ export default defineComponent({
 
           return h(
             StaticTag,
-            { ...staticRest, style: styleStringToObject(staticStyle) },
+            {
+              key: i,
+              ...staticRest,
+              style: styleStringToObject(staticStyle),
+            },
             isSelfClosing(StaticTag) ? undefined : content,
           );
         });
@@ -82,12 +89,14 @@ export default defineComponent({
 
       return h(
         Tag,
-        { ...rest, style: styleStringToObject(style) },
+        {
+          ...rest,
+          style: styleStringToObject(style),
+        },
         isSelfClosing(Tag) ? undefined : children,
       );
     };
 
-    return renderFn;
+    return () => renderNode(props.node);
   },
 });
-</script>

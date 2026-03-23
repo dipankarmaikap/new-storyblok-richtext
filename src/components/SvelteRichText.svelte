@@ -5,10 +5,6 @@
   
 	let { doc }: { doc: StoryblokRichTextJson } = $props();
 
-  // Example of custom component mapping
-  const components = {
-    blok: CustomBlok,
-  };
 </script>
 
 
@@ -20,6 +16,8 @@
   <div
     class="p-6 bg-white rounded-lg shadow-md border border-gray-200 max-w-none"
   >
-<SvelteRichTextRenderer doc={doc} {components} />
+<SvelteRichTextRenderer doc={doc} components={{
+  blok: CustomBlok,
+}} />
   </div>
 </section>

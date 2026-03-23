@@ -5,7 +5,7 @@ import type {
   TiptapComponentName,
   TiptapMarkName,
   TiptapNodeName,
-} from "./vue";
+} from "./";
 import {
   MARK_RENDER_MAP,
   NODE_RENDER_MAP,

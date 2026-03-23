@@ -3,12 +3,14 @@ import { h } from "vue";
 import { VueRichTextRenderer } from "@/lib/richtext-renderer/vue";
 import type { StoryblokRichTextJson } from "@/lib/richtext-renderer";
 import CustomBlok from "./vue/CustomBlok.vue";
+import CustomHeadingVue from "@/components/vue/CustomHeading.vue";
 const props = defineProps<{
   doc: StoryblokRichTextJson;
 }>();
 
 const components = {
   blok: CustomBlok,
+  heading: CustomHeadingVue,
 };
 </script>
 
